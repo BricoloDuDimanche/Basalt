@@ -58,7 +58,7 @@ task sourcesForRelease(type: Copy) {
 
 //noinspection GroovyAssignabilityCheck
 task generateKotlinSources(type: SourceTask) {
-    def kotlinSources = sourceSets.main.allSource.filter {
+    def kotlinSources = sourceSets.main.allJava.filter {
         it.name != 'Version.kt'
     }
     source = kotlinSources + sourcesForRelease.destinationDir
@@ -67,7 +67,6 @@ task generateKotlinSources(type: SourceTask) {
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
-    // Not smart enough atm
     // source = generateKotlinSources.source
     // dependsOn generateKotlinSources
 }

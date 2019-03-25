@@ -1,6 +1,6 @@
 # Basalt
 ![Latest GitHub tag](https://img.shields.io/github/tag-date/BricoloDuDimanche/Basalt.svg?style=flat-square)
-[![License](https://img.shields.io/github/license/BricoloDuDimanche/Basalt.svg?style=flat-square)](https://github.com/BricoloDuDimanche/Granite/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/BricoloDuDimanche/Basalt.svg?style=flat-square)](https://github.com/BricoloDuDimanche/Basalt/blob/master/LICENSE)
 [![Discord](https://img.shields.io/badge/chat-on%20Discord%20(%23basalt)-7289DA.svg?style=flat-square)](https://discord.gg/2CkzJzM)
 [![Donate](https://img.shields.io/badge/donate-Patreon-F96854.svg?style=flat-square)](https://www.patreon.com/Bowser65)
 
@@ -42,8 +42,13 @@ By default, all custom sources are disabled. You'll need to add some entries to 
 
 Note that some services like Spotify requires you to use an access token, so you'll need a Spotify app
 
-| Key                         | Type    | Description                                  |
-|-----------------------------|---------|----------------------------------------------|
-| basalt.spotify.enabled      | boolean | Whether or not to enable Spotify integration |
-| basalt.spotify.clientID     | string  | Spotify client ID                            |
-| basalt.spotify.clientSecret | string  | Spotify client secret                        |
+| Key                         | Type     | Description                                  |
+|-----------------------------|----------|----------------------------------------------|
+| basalt.youtube-keys         | String[] | Youtube API keys used to fetch tracks        |
+| basalt.spotify.enabled      | boolean  | Whether or not to enable Spotify integration |
+| basalt.spotify.clientID     | string   | Spotify client ID                            |
+| basalt.spotify.clientSecret | string   | Spotify client secret                        |
+
+### Youtube keys
+You may have noticed that we take an array of keys in `basalt.youtube-keys`. This is because Basalt will use key
+rotation to handle heavy loads, to ensure you have enough quota
