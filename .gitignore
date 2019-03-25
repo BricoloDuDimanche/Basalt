@@ -1,0 +1,10 @@
+# JetBrains
+.idea
+
+# Gradle
+.gradle
+build
+out
+
+# My stuff
+*.nogit.*

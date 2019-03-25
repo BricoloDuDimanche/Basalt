@@ -1,0 +1,87 @@
+buildscript {
+    ext.kotlin_version = '1.3.21'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: "kotlin"
+
+def versionObj = new Version(major: 0, minor: 0, revision: 1)
+
+allprojects {
+    group 'bot.bricolo.basalt'
+    version versionObj.toString()
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://dl.bintray.com/natanbc/maven' }
+}
+
+dependencies {
+    api 'org.slf4j:slf4j-api:1.7.25'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'com.github.natanbc:andesite-api:0.15.5'
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+//noinspection GroovyAssignabilityCheck
+task sourcesForRelease(type: Copy) {
+    from ('src/main/kotlin') {
+        include '**/Version.kt'
+        filter(ReplaceTokens, tokens: [
+                VERSION_MAJOR:    versionObj.major,
+                VERSION_MINOR:    versionObj.minor,
+                VERSION_REVISION: versionObj.revision,
+                COMMIT:           getCommitHash(),
+        ])
+    }
+    into 'build/filteredSrc'
+
+    includeEmptyDirs = false
+}
+
+//noinspection GroovyAssignabilityCheck
+task generateKotlinSources(type: SourceTask) {
+    def kotlinSources = sourceSets.main.allSource.filter {
+        it.name != 'Version.kt'
+    }
+    source = kotlinSources + sourcesForRelease.destinationDir
+    dependsOn sourcesForRelease
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+    // Not smart enough atm
+    // source = generateKotlinSources.source
+    // dependsOn generateKotlinSources
+}
+
+jar {
+    // Add shit
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+class Version {
+    String major, minor, revision
+
+    String toString() {
+        "$major.$minor.$revision"
+    }
+}
+
+static def getCommitHash() {
+    def p = Runtime.getRuntime().exec("git rev-parse HEAD")
+    p.waitFor()
+    p.getIn().text.trim()
+}
