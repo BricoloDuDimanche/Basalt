@@ -8,6 +8,11 @@
 
 **NOTE**: The plugin is **very unstable** atm and should **not** be used in a production app.
 
+## Supported platforms 
+ - Spotify
+ - Deezer (soon)
+ - PornHub (soon)
+
 ## How it work
 Just fetch /loadtracks with a link from a custom source provider. It works for tracks, playlist and albums.
 
@@ -42,13 +47,18 @@ By default, all custom sources are disabled. You'll need to add some entries to 
 
 Note that some services like Spotify requires you to use an access token, so you'll need a Spotify app
 
-| Key                         | Type     | Description                                  |
-|-----------------------------|----------|----------------------------------------------|
-| basalt.youtube-keys         | String[] | Youtube API keys used to fetch tracks        |
-| basalt.spotify.enabled      | boolean  | Whether or not to enable Spotify integration |
-| basalt.spotify.clientID     | string   | Spotify client ID                            |
-| basalt.spotify.clientSecret | string   | Spotify client secret                        |
+| Key                         | Type     | Description                                                           |
+|-----------------------------|----------|-----------------------------------------------------------------------|
+| basalt.proxy                | String[] | Proxy IPs used to bypass ratelimits from some services (PornHub, ...) |
+| basalt.youtube-keys         | String[] | Youtube API keys used to fetch tracks                                 |
+| basalt.spotify.enabled      | boolean  | Whether or not to enable Spotify integration                          |
+| basalt.spotify.clientID     | string   | Spotify client ID                                                     |
+| basalt.spotify.clientSecret | string   | Spotify client secret                                                 |
 
 ### Youtube keys
 You may have noticed that we take an array of keys in `basalt.youtube-keys`. This is because Basalt will use key
 rotation to handle heavy loads, to ensure you have enough quota
+
+## Attribution
+
+PornHub integration mostly taken from [JukeBot](https://github.com/Devoxin/JukeBot) by [Devoxin](https://github.com/Devoxin) (Licensed under [Apache License 2.0](https://github.com/Devoxin/JukeBot/blob/master/LICENSE))

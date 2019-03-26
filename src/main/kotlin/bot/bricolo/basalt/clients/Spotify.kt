@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit
 class Spotify(private val clientId: String, private val clientSecret: String) {
     private val logger = LoggerFactory.getLogger("Basalt:SpotifyClient")
     private var accessToken: String = ""
+    private var enabled = false
 
     init {
         refreshAccessToken()
@@ -26,6 +27,7 @@ class Spotify(private val clientId: String, private val clientSecret: String) {
     // API Functions
     // ----------
     fun getTrack(trackId: String, callback: (BasaltTrack?) -> Unit) {
+        if (!enabled) return callback(null)
         Basalt.HTTP.get("https://api.spotify.com/v1/tracks/$trackId", createHeaders(Pair("Authorization", "Bearer $accessToken"))).queue {
             val json = it?.json() ?: return@queue callback(null)
             val artist = json.getJSONArray("artists").getJSONObject(0).getString("name")
@@ -35,12 +37,14 @@ class Spotify(private val clientId: String, private val clientSecret: String) {
     }
 
     fun getTracksFromPlaylist(userId: String, playlistId: String, callback: (SpotifyPlaylist?) -> Unit) {
+        if (!enabled) return callback(null)
         Basalt.HTTP.get("https://api.spotify.com/v1/users/$userId/playlists/$playlistId/tracks", createHeaders(Pair("Authorization", "Bearer $accessToken"))).queue {
             handleItems(it, callback)
         }
     }
 
     fun getTracksFromAlbum(albumId: String, callback: (SpotifyPlaylist?) -> Unit) {
+        if (!enabled) return callback(null)
         Basalt.HTTP.get("https://api.spotify.com/v1/albums/$albumId/tracks", createHeaders(Pair("Authorization", "Bearer $accessToken"))).queue {
             handleItems(it, callback, true)
         }
@@ -92,18 +96,21 @@ class Spotify(private val clientId: String, private val clientSecret: String) {
             if (json == null) {
                 logger.warn("Unable to refresh access token: Response body was null!", it?.code() ?: 0, it?.message())
                 Basalt.setTimeout(this::refreshAccessToken, 1 * 60 * 1000)
+                enabled = false
                 return@queue
             }
 
             if (json.has("error") && json.getString("error").startsWith("invalid_")) {
                 logger.error("Failed to refresh access token: ${json.getString("error")}")
                 Basalt.setTimeout(this::refreshAccessToken, 1 * 60 * 1000)
+                enabled = false
                 return@queue
             }
 
             val refreshIn = json.getInt("expires_in")
             accessToken = json.getString("access_token")
             Basalt.setTimeout(this::refreshAccessToken, (refreshIn * 1000) - 10000)
+            enabled = true
 
             logger.debug("Updated access token")
         }
@@ -126,5 +133,5 @@ class Spotify(private val clientId: String, private val clientSecret: String) {
         callback(playlist)
     }
 
-    class SpotifyPlaylist(override val name: String): BasaltPlaylist(name)
+    class SpotifyPlaylist(override val name: String) : BasaltPlaylist(name)
 }

@@ -2,19 +2,14 @@ package bot.bricolo.basalt.sources
 
 import bot.bricolo.basalt.clients.entities.BasaltPlaylist
 import bot.bricolo.basalt.clients.entities.BasaltTrack
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.track.*
 import java.io.DataInput
 import java.io.DataOutput
-import java.util.concurrent.Executors
 
 abstract class AbstractSourceLoader : AudioSourceManager {
-    private var loaderPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())!!
-
     override fun isTrackEncodable(track: AudioTrack?) = false
-    override fun shutdown() = loaderPool.shutdown()
+    override fun shutdown() {}
 
     override fun encodeTrack(track: AudioTrack?, output: DataOutput?) = throw UnsupportedOperationException("Source manager may only be used to load items.")
     override fun decodeTrack(trackInfo: AudioTrackInfo?, input: DataInput?) = throw UnsupportedOperationException("Source manager may only be used to load items.")
