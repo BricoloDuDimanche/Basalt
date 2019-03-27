@@ -1,5 +1,6 @@
 package bot.bricolo.basalt.sources
 
+import bot.bricolo.basalt.Basalt
 import bot.bricolo.basalt.clients.Spotify
 import bot.bricolo.basalt.clients.entities.BasaltPlaylist
 import bot.bricolo.basalt.clients.entities.BasaltTrack
@@ -10,7 +11,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioReference
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class SpotifySourceManager(val API: Spotify) : AbstractSourceLoader() {
+class SpotifySourceManager() : AbstractSourceLoader() {
     @Suppress("PrivatePropertyName")
     private val PLAYLIST_PATTERN = Pattern.compile("^https?://.*\\.spotify\\.com/user/([a-zA-Z0-9_]+)/playlist/([a-zA-Z0-9]+).*")
 
@@ -24,35 +25,35 @@ class SpotifySourceManager(val API: Spotify) : AbstractSourceLoader() {
 
     override fun loadItem(manager: DefaultAudioPlayerManager, reference: AudioReference): AudioItem? {
         return when {
-            TRACK_PATTERN.toRegex().matches(reference.identifier) -> loadTrack(TRACK_PATTERN.matcher(reference.identifier))
-            PLAYLIST_PATTERN.toRegex().matches(reference.identifier) -> loadPlaylist(PLAYLIST_PATTERN.matcher(reference.identifier))
-            ALBUM_PATTERN.toRegex().matches(reference.identifier) -> loadAlbum(ALBUM_PATTERN.matcher(reference.identifier))
+            TRACK_PATTERN.toRegex().matches(reference.identifier) -> loadTrack(manager, TRACK_PATTERN.matcher(reference.identifier))
+            PLAYLIST_PATTERN.toRegex().matches(reference.identifier) -> loadPlaylist(manager, PLAYLIST_PATTERN.matcher(reference.identifier))
+            ALBUM_PATTERN.toRegex().matches(reference.identifier) -> loadAlbum(manager, ALBUM_PATTERN.matcher(reference.identifier))
             else -> null
         }
     }
 
-    private fun loadTrack(match: Matcher): AudioItem {
+    private fun loadTrack(manager: DefaultAudioPlayerManager, match: Matcher): AudioItem {
         match.matches()
         val trackId: String = match.group(1)
-        val track = API.getTrackBlocking(trackId) ?: return AudioReference.NO_TRACK
+        val track = Basalt.spotify.getTrack(trackId) ?: return AudioReference.NO_TRACK
 
-        return getYoutubeTrack(track)
+        return getYoutubeTrack(manager, track)
     }
 
-    private fun loadPlaylist(match: Matcher): AudioItem {
+    private fun loadPlaylist(manager: DefaultAudioPlayerManager, match: Matcher): AudioItem {
         match.matches()
         val userId: String = match.group(1)
         val listId: String = match.group(2)
-        val playlist = API.getTracksFromPlaylistBlocking(userId, listId) ?: return AudioReference.NO_TRACK
+        val playlist = Basalt.spotify.getTracksFromPlaylist(userId, listId) ?: return AudioReference.NO_TRACK
 
-        return handlePlaylist(playlist)
+        return handlePlaylist(manager, playlist)
     }
 
-    private fun loadAlbum(match: Matcher): AudioItem {
+    private fun loadAlbum(manager: DefaultAudioPlayerManager, match: Matcher): AudioItem {
         match.matches()
         val albumId: String = match.group(1)
-        val playlist = API.getTracksFromAlbumBlocking(albumId) ?: return AudioReference.NO_TRACK
+        val playlist = Basalt.spotify.getTracksFromAlbum(albumId) ?: return AudioReference.NO_TRACK
 
-        return handlePlaylist(playlist)
+        return handlePlaylist(manager, playlist)
     }
 }

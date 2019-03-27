@@ -45,19 +45,16 @@ GET /loadtracks?identifier=https://open.spotify.com/track/1HDApabtZoWpGEcWAMMyNM
 ## Configuration
 By default, all custom sources are disabled. You'll need to add some entries to your Andesite config.
 
-Note that some services like Spotify requires you to use an access token, so you'll need a Spotify app
+Note that some services like Spotify requires you to use an access token, so you'll need a Spotify app<br>
+Only `youtube-keys` is required. Not setting it up will just make Basalt return no track for every search
 
-| Key                         | Type     | Description                                                           |
-|-----------------------------|----------|-----------------------------------------------------------------------|
-| basalt.proxy                | String[] | Proxy IPs used to bypass ratelimits from some services (PornHub, ...) |
-| basalt.youtube-keys         | String[] | Youtube API keys used to fetch tracks                                 |
-| basalt.spotify.enabled      | boolean  | Whether or not to enable Spotify integration                          |
-| basalt.spotify.clientID     | string   | Spotify client ID                                                     |
-| basalt.spotify.clientSecret | string   | Spotify client secret                                                 |
-
-### Youtube keys
-You may have noticed that we take an array of keys in `basalt.youtube-keys`. This is because Basalt will use key
-rotation to handle heavy loads, to ensure you have enough quota
+| Key                         | Type     | Description                                                                            |
+|-----------------------------|----------|----------------------------------------------------------------------------------------|
+| basalt.proxy                | String[] | Proxy IPs used to bypass ratelimits from some services (PornHub, ...), comma separated |
+| basalt.youtube-keys         | String   | Youtube API keys used to fetch tracks, comma separated to use key rotation             |
+| basalt.spotify.enabled      | boolean  | Whether or not to enable Spotify integration                                           |
+| basalt.spotify.clientID     | string   | Spotify client ID                                                                      |
+| basalt.spotify.clientSecret | string   | Spotify client secret                                                                  |
 
 ## Attribution
 

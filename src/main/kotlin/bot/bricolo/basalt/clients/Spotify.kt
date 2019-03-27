@@ -11,11 +11,9 @@ import okhttp3.Response
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import java.util.*
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit
 
-class Spotify(private val clientId: String, private val clientSecret: String) {
-    private val logger = LoggerFactory.getLogger("Basalt:SpotifyClient")
+class Spotify(private val clientId: String, private val clientSecret: String) : AbstractClient() {
+    private val logger = LoggerFactory.getLogger("Basalt::SpotifyClient")
     private var accessToken: String = ""
     private var enabled = false
 
@@ -26,61 +24,25 @@ class Spotify(private val clientId: String, private val clientSecret: String) {
     // ----------
     // API Functions
     // ----------
-    fun getTrack(trackId: String, callback: (BasaltTrack?) -> Unit) {
-        if (!enabled) return callback(null)
-        Basalt.HTTP.get("https://api.spotify.com/v1/tracks/$trackId", createHeaders(Pair("Authorization", "Bearer $accessToken"))).queue {
-            val json = it?.json() ?: return@queue callback(null)
-            val artist = json.getJSONArray("artists").getJSONObject(0).getString("name")
-            val trackName = json.getString("name")
-            callback(BasaltTrack(artist, trackName))
-        }
+    fun getTrack(trackId: String): BasaltTrack? {
+        if (!enabled) return null
+        val response = callAPI("https://api.spotify.com/v1/tracks/$trackId", createHeaders(Pair("Authorization", "Bearer $accessToken")))
+        val json = response?.json() ?: return null
+        val artist = json.getJSONArray("artists").getJSONObject(0).getString("name")
+        val trackName = json.getString("name")
+        return BasaltTrack(artist, trackName)
     }
 
-    fun getTracksFromPlaylist(userId: String, playlistId: String, callback: (SpotifyPlaylist?) -> Unit) {
-        if (!enabled) return callback(null)
-        Basalt.HTTP.get("https://api.spotify.com/v1/users/$userId/playlists/$playlistId/tracks", createHeaders(Pair("Authorization", "Bearer $accessToken"))).queue {
-            handleItems(it, callback)
-        }
+    fun getTracksFromPlaylist(userId: String, playlistId: String): SpotifyPlaylist? {
+        if (!enabled) return null
+        val response = callAPI("https://api.spotify.com/v1/users/$userId/playlists/$playlistId/tracks", createHeaders(Pair("Authorization", "Bearer $accessToken")))
+        return handleItems(response)
     }
 
-    fun getTracksFromAlbum(albumId: String, callback: (SpotifyPlaylist?) -> Unit) {
-        if (!enabled) return callback(null)
-        Basalt.HTTP.get("https://api.spotify.com/v1/albums/$albumId/tracks", createHeaders(Pair("Authorization", "Bearer $accessToken"))).queue {
-            handleItems(it, callback, true)
-        }
-    }
-
-    // ----------
-    // Blocking versions
-    // ----------
-    fun getTrackBlocking(trackId: String): BasaltTrack? {
-        val promise = CompletableFuture<BasaltTrack?>()
-
-        getTrack(trackId) {
-            promise.complete(it)
-        }
-
-        return promise.get(10, TimeUnit.SECONDS)
-    }
-
-    fun getTracksFromPlaylistBlocking(userId: String, playlistId: String): SpotifyPlaylist? {
-        val promise = CompletableFuture<SpotifyPlaylist?>()
-
-        getTracksFromPlaylist(userId, playlistId) {
-            promise.complete(it)
-        }
-
-        return promise.get(10, TimeUnit.SECONDS)
-    }
-
-    fun getTracksFromAlbumBlocking(albumId: String): SpotifyPlaylist? {
-        val promise = CompletableFuture<SpotifyPlaylist?>()
-
-        getTracksFromAlbum(albumId) {
-            promise.complete(it)
-        }
-
-        return promise.get(10, TimeUnit.SECONDS)
+    fun getTracksFromAlbum(albumId: String): SpotifyPlaylist? {
+        if (!enabled) return null
+        val response = callAPI("https://api.spotify.com/v1/albums/$albumId/tracks", createHeaders(Pair("Authorization", "Bearer $accessToken")))
+        return handleItems(response, true)
     }
 
     // ----------
@@ -116,11 +78,11 @@ class Spotify(private val clientId: String, private val clientSecret: String) {
         }
     }
 
-    private fun handleItems(response: Response?, callback: (SpotifyPlaylist?) -> Unit, album: Boolean = false) {
-        val json = response?.json() ?: return callback(null)
+    private fun handleItems(response: Response?, album: Boolean = false): SpotifyPlaylist? {
+        val json = response?.json() ?: return null
         val playlist = SpotifyPlaylist(if (album) "Spotify Album" else "Spotify Playlist")
 
-        if (!json.has("items")) return callback(null)
+        if (!json.has("items")) return null
         val tracks = json.getJSONArray("items")
 
         tracks.forEach {
@@ -130,7 +92,7 @@ class Spotify(private val clientId: String, private val clientSecret: String) {
             playlist.addTrack(artist, trackName)
         }
 
-        callback(playlist)
+        return playlist
     }
 
     class SpotifyPlaylist(override val name: String) : BasaltPlaylist(name)

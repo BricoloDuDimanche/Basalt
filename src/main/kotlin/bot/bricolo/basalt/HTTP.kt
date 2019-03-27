@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 class HTTP {
-    private val logger = LoggerFactory.getLogger("Basalt:HTTP")
+    private val logger = LoggerFactory.getLogger("Basalt::HTTP")
     private val userAgent = "Basalt/${Version.VERSION} ${OkVersion.userAgent()} (https://github.com/BricoloDuDimanche/Basalt)"
     private val hiddenUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0"
 
