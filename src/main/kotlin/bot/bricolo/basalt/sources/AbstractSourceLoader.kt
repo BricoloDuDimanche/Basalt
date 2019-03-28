@@ -19,8 +19,9 @@ abstract class AbstractSourceLoader : AudioSourceManager {
 
     protected fun getYoutubeTrack(manager: DefaultAudioPlayerManager, track: BasaltTrack): AudioItem {
         val youtube = manager.source(YoutubeAudioSourceManager::class.java)
-        val result = Basalt.ddg.searchVideo("${track.title} ${track.artist}", youtube)
-        return result ?: AudioReference.NO_TRACK
+        val item = youtube.loadItem(manager, AudioReference("ytsearch:${track.title} ${track.artist}", null))
+
+        return if (item is AudioPlaylist) item.tracks.first() else AudioReference.NO_TRACK
     }
 
     // @todo: Parallel!!!

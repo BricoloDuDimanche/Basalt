@@ -26,7 +26,7 @@ class Spotify(private val clientId: String, private val clientSecret: String) : 
     // ----------
     fun getTrack(trackId: String): BasaltTrack? {
         if (!enabled) return null
-        val response = callAPI("https://api.spotify.com/v1/tracks/$trackId", createHeaders(Pair("Authorization", "Bearer $accessToken")))
+        val response = request("https://api.spotify.com/v1/tracks/$trackId", createHeaders(Pair("Authorization", "Bearer $accessToken")))
         val json = response?.json() ?: return null
         val artist = json.getJSONArray("artists").getJSONObject(0).getString("name")
         val trackName = json.getString("name")
@@ -35,13 +35,13 @@ class Spotify(private val clientId: String, private val clientSecret: String) : 
 
     fun getTracksFromPlaylist(userId: String, playlistId: String): SpotifyPlaylist? {
         if (!enabled) return null
-        val response = callAPI("https://api.spotify.com/v1/users/$userId/playlists/$playlistId/tracks", createHeaders(Pair("Authorization", "Bearer $accessToken")))
+        val response = request("https://api.spotify.com/v1/users/$userId/playlists/$playlistId/tracks", createHeaders(Pair("Authorization", "Bearer $accessToken")))
         return handleItems(response)
     }
 
     fun getTracksFromAlbum(albumId: String): SpotifyPlaylist? {
         if (!enabled) return null
-        val response = callAPI("https://api.spotify.com/v1/albums/$albumId/tracks", createHeaders(Pair("Authorization", "Bearer $accessToken")))
+        val response = request("https://api.spotify.com/v1/albums/$albumId/tracks", createHeaders(Pair("Authorization", "Bearer $accessToken")))
         return handleItems(response, true)
     }
 

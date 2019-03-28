@@ -26,8 +26,8 @@ class SpotifySourceManager() : AbstractSourceLoader() {
     override fun loadItem(manager: DefaultAudioPlayerManager, reference: AudioReference): AudioItem? {
         return when {
             TRACK_PATTERN.toRegex().matches(reference.identifier) -> loadTrack(manager, TRACK_PATTERN.matcher(reference.identifier))
-            PLAYLIST_PATTERN.toRegex().matches(reference.identifier) -> loadPlaylist(manager, PLAYLIST_PATTERN.matcher(reference.identifier))
-            ALBUM_PATTERN.toRegex().matches(reference.identifier) -> loadAlbum(manager, ALBUM_PATTERN.matcher(reference.identifier))
+            // PLAYLIST_PATTERN.toRegex().matches(reference.identifier) -> loadPlaylist(manager, PLAYLIST_PATTERN.matcher(reference.identifier))
+            // ALBUM_PATTERN.toRegex().matches(reference.identifier) -> loadAlbum(manager, ALBUM_PATTERN.matcher(reference.identifier))
             else -> null
         }
     }
