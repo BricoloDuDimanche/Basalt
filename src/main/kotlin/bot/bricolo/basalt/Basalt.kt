@@ -2,19 +2,23 @@ package bot.bricolo.basalt
 
 import andesite.node.NodeState
 import andesite.node.Plugin
+import bot.bricolo.basalt.clients.Deezer
 import bot.bricolo.basalt.clients.Spotify
+import bot.bricolo.basalt.sources.DeezerSourceManager
 import bot.bricolo.basalt.sources.PornHubSourceManager
 import bot.bricolo.basalt.sources.SpotifySourceManager
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import org.slf4j.LoggerFactory
 
-@Suppress("UnstableApiUsage")
 class Basalt : Plugin {
     companion object {
         private val logger = LoggerFactory.getLogger("Basalt")
         val HTTP = HTTP()
 
         lateinit var spotify: Spotify
+            private set
+
+        lateinit var deezer: Deezer
             private set
 
         fun setTimeout(runnable: () -> Unit, delay: Int) {
@@ -32,7 +36,11 @@ class Basalt : Plugin {
     override fun init(state: NodeState) {
         logger.info("Starting Basalt version ${Version.VERSION}, commit ${Version.COMMIT}")
 
-        spotify = Spotify(state.config().get("basalt.spotify.clientID", ""), state.config().get("basalt.spotify.clientSecret", ""))
+        if (state.config().getBoolean("basalt.spotify.enabled", false))
+            spotify = Spotify(state.config().get("basalt.spotify.clientID", ""), state.config().get("basalt.spotify.clientSecret", ""))
+
+        if (state.config().getBoolean("basalt.deezer.enabled", false))
+            deezer = Deezer()
     }
 
     override fun configurePlayerManager(state: NodeState, manager: AudioPlayerManager) {
@@ -44,6 +52,11 @@ class Basalt : Plugin {
         if (state.config().getBoolean("basalt.pornhub.enabled", false)) {
             logger.info("Registering PornHubSourceManager source manager")
             manager.registerSourceManager(PornHubSourceManager())
+        }
+
+        if (state.config().getBoolean("basalt.deezer.enabled", false)) {
+            logger.info("Registering DeezerSourceManager source manager")
+            manager.registerSourceManager(DeezerSourceManager())
         }
     }
 }

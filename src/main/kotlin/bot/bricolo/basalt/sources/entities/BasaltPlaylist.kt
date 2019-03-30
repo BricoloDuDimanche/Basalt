@@ -1,4 +1,4 @@
-package bot.bricolo.basalt.clients.entities
+package bot.bricolo.basalt.sources.entities
 
 abstract class BasaltPlaylist(open val name: String) {
     val tracks: MutableList<BasaltTrack> = mutableListOf()

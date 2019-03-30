@@ -24,9 +24,8 @@ class PornHubAudioTrack(trackInfo: AudioTrackInfo, private val sourceManager: Po
         return sourceManager
     }
 
-    @Throws(Exception::class)
     override fun process(localExecutor: LocalAudioTrackExecutor) {
-        val playbackUrl = getPlaybackUrl() ?: throw Exception("no playback url found")
+        val playbackUrl = getPlaybackUrl() ?: throw Exception("No playback URL found")
         sourceManager.httpInterfaceManager.`interface`.use {
             PersistentHttpStream(it, URI(playbackUrl), Long.MAX_VALUE).use { stream ->
                 processDelegate(MpegAudioTrack(trackInfo, stream), localExecutor)

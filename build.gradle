@@ -43,7 +43,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 //noinspection GroovyAssignabilityCheck
 task sourcesForRelease(type: Copy) {
     from ('src/main/kotlin') {
-        include '**/Version.kt'
+        include '**/Version.java'
         filter(ReplaceTokens, tokens: [
                 VERSION_MAJOR:    versionObj.major,
                 VERSION_MINOR:    versionObj.minor,
@@ -57,18 +57,19 @@ task sourcesForRelease(type: Copy) {
 }
 
 //noinspection GroovyAssignabilityCheck
-task generateKotlinSources(type: SourceTask) {
-    def kotlinSources = sourceSets.main.allJava.filter {
-        it.name != 'Version.kt'
+task generateJavaSources(type: SourceTask) {
+    def javaSources = sourceSets.main.allJava.filter {
+        it.name != 'Version.java'
     }
-    source = kotlinSources + sourcesForRelease.destinationDir
+    source = javaSources + sourcesForRelease.destinationDir
+
     dependsOn sourcesForRelease
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-    // source = generateKotlinSources.source
-    // dependsOn generateKotlinSources
+compileJava {
+    source = generateJavaSources.source
+
+    dependsOn generateJavaSources
 }
 
 jar {

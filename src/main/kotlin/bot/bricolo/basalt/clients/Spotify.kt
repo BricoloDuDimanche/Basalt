@@ -1,8 +1,8 @@
 package bot.bricolo.basalt.clients
 
 import bot.bricolo.basalt.Basalt
-import bot.bricolo.basalt.clients.entities.BasaltPlaylist
-import bot.bricolo.basalt.clients.entities.BasaltTrack
+import bot.bricolo.basalt.sources.entities.BasaltPlaylist
+import bot.bricolo.basalt.sources.entities.BasaltTrack
 import bot.bricolo.basalt.createHeaders
 import bot.bricolo.basalt.json
 import okhttp3.MediaType

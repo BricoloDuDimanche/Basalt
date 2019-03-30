@@ -1,7 +1,7 @@
 package bot.bricolo.basalt.sources
 
-import bot.bricolo.basalt.clients.entities.BasaltPlaylist
-import bot.bricolo.basalt.clients.entities.BasaltTrack
+import bot.bricolo.basalt.sources.entities.BasaltPlaylist
+import bot.bricolo.basalt.sources.entities.BasaltTrack
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager

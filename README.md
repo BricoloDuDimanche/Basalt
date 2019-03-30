@@ -4,14 +4,14 @@
 [![Discord](https://img.shields.io/badge/chat-on%20Discord%20(%23basalt)-7289DA.svg?style=flat-square)](https://discord.gg/2CkzJzM)
 [![Donate](https://img.shields.io/badge/donate-Patreon-F96854.svg?style=flat-square)](https://www.patreon.com/Bowser65)
 
-[Andesite](https://github.com/natanbc/andesite-node) plugin to provide extra sources like Spotify or Deezer 
+[Andesite](https://github.com/natanbc/andesite-node) plugin to provide extra sources like Spotify or Deezer as well as caching
 
 **NOTE**: The plugin is **very unstable** atm and should **not** be used in a production app.
 
 ## Supported platforms 
  - Spotify
- - Deezer (soon)
- - PornHub (soon)
+ - Deezer
+ - PornHub
 
 ## How it work
 Just fetch /loadtracks with a link from a custom source provider. It works for tracks, playlist and albums.
@@ -55,6 +55,7 @@ Only `youtube-keys` is required. Not setting it up will just make Basalt return 
 | basalt.spotify.enabled      | boolean  | Whether or not to enable Spotify integration                                           |
 | basalt.spotify.clientID     | string   | Spotify client ID                                                                      |
 | basalt.spotify.clientSecret | string   | Spotify client secret                                                                  |
+| basalt.deezer.enabled       | boolean  | Whether or not to enable Deezer integration                                            |
 | basalt.pornhub.enabled      | boolean  | Whether or not to enable PornHub integration                                           |
 
 ## Attribution
