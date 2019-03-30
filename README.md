@@ -1,5 +1,6 @@
 # Basalt
-![Latest GitHub tag](https://img.shields.io/github/tag-date/BricoloDuDimanche/Basalt.svg?style=flat-square)
+[![Build Status](https://img.shields.io/travis/BricoloDuDimanche/Basalt.svg?branch=master&style=flat-square&logo=travis)](https://travis-ci.org/BricoloDuDimanche/Basalt)
+[![Latest GitHub tag](https://img.shields.io/github/tag-date/BricoloDuDimanche/Basalt.svg?style=flat-square)](https://github.com/BricoloDuDimanche/Basalt/releases)
 [![License](https://img.shields.io/github/license/BricoloDuDimanche/Basalt.svg?style=flat-square)](https://github.com/BricoloDuDimanche/Basalt/blob/master/LICENSE)
 [![Discord](https://img.shields.io/badge/chat-on%20Discord%20(%23basalt)-7289DA.svg?style=flat-square)](https://discord.gg/2CkzJzM)
 [![Donate](https://img.shields.io/badge/donate-Patreon-F96854.svg?style=flat-square)](https://www.patreon.com/Bowser65)

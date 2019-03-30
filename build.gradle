@@ -14,7 +14,7 @@ buildscript {
 
 apply plugin: "kotlin"
 
-def versionObj = new Version(major: 0, minor: 1, revision: 0)
+def versionObj = new Version(major: 0, minor: 1, revision: 1)
 
 allprojects {
     group 'bot.bricolo.basalt'
