@@ -54,7 +54,7 @@ You'll need to add some entries to your Andesite config to setup Basalt
 | basalt.source.pornhub       | boolean  | Whether or not to enable PornHub integration                         | false   |
 | basalt.spotify.clientID     | string   | Spotify client ID                                                    | null    |
 | basalt.spotify.clientSecret | string   | Spotify client secret                                                | null    |
-| basalt.max-heavy-tracks     | int      | Maximum tracks to load from a playlist considered as [heavy](#heavy) | 25      |
+| basalt.max-heavy-tracks     | int      | Maximum tracks to load from a playlist considered as [heavy](#heavy) | 10      |
 
 ### Heavy
 
