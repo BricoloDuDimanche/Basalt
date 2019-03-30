@@ -26,4 +26,4 @@ deploy:
 
 script:
   - chmod +x gradlew
-  - ./gradlew buildAll
+  - ./gradlew build
