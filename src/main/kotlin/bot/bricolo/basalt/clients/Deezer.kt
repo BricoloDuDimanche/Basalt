@@ -15,7 +15,7 @@ class Deezer {
     // API Functions
     // ----------
     fun getTrack(trackId: String): BasaltTrack? {
-        val response = Basalt.HTTP.get("https://api.deezer.com/track/$trackId").block()
+        val response = Basalt.HTTP.get("https://api.deezer.com/track/$trackId").execute()
         val json = response?.json() ?: return null
         val artist = json.getJSONObject("artist").getString("name")
         val trackName = json.getString("title")
@@ -23,12 +23,12 @@ class Deezer {
     }
 
     fun getTracksFromPlaylist(playlistId: String): DeezerPlaylist? {
-        val response = Basalt.HTTP.get("https://api.deezer.com/playlist/$playlistId").block()
+        val response = Basalt.HTTP.get("https://api.deezer.com/playlist/$playlistId").execute()
         return handleItems(response)
     }
 
     fun getTracksFromAlbum(albumId: String): DeezerPlaylist? {
-        val response = Basalt.HTTP.get("https://api.deezer.com/album/$albumId").block()
+        val response = Basalt.HTTP.get("https://api.deezer.com/album/$albumId").execute()
         return handleItems(response, true)
     }
 

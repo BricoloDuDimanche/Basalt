@@ -1,0 +1,29 @@
+language: java
+sudo: false
+install: true
+
+jdk:
+  - openjdk11
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+deploy:
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file_glob: true
+    file:
+      - build/libs/*
+    skip_cleanup: true
+    name: $TRAVIS_TAG
+    on:
+      tags: true
+
+script:
+  - chmod +x gradlew
+  - ./gradlew buildAll

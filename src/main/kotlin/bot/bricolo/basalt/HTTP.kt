@@ -37,13 +37,7 @@ class HTTP {
             })
         }
 
-        suspend fun await(): Response? {
-            val future = CompletableFuture<Response?>()
-            queue { future.complete(it) }
-            return future.await()
-        }
-
-        fun block(): Response? {
+        fun execute(): Response? {
             return try {
                 httpClient.newCall(request).execute()
             } catch (e: IOException) {
@@ -87,17 +81,5 @@ fun Response.json(): JSONObject? {
 
     body.use {
         return if (isSuccessful && body != null) JSONObject(body.string()) else null
-    }
-}
-
-fun Response.jsonArray(): JSONArray? {
-    val body = body()
-
-    body().use {
-        return if (isSuccessful && body != null) {
-            JSONArray(body()!!.string())
-        } else {
-            null
-        }
     }
 }

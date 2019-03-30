@@ -44,7 +44,7 @@ class PornHubAudioTrack(trackInfo: AudioTrackInfo, private val sourceManager: Po
     }
 
     private fun getPageConfig(): JSONObject? {
-        val response = Basalt.HTTP.get(trackInfo.uri).block() ?: return null
+        val response = Basalt.HTTP.get(trackInfo.uri).execute() ?: return null
         if (response.code() != 200) {
             return null
         }
