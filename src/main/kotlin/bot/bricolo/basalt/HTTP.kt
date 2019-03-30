@@ -1,13 +1,10 @@
 package bot.bricolo.basalt
 
-import kotlinx.coroutines.future.await
 import okhttp3.*
-import org.json.JSONArray
 import org.json.JSONObject
 import okhttp3.internal.Version as OkVersion
 import org.slf4j.LoggerFactory
 import java.io.IOException
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 class HTTP {
@@ -18,7 +15,7 @@ class HTTP {
     private val httpClient = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
             .connectionPool(ConnectionPool(200, 5L, TimeUnit.MINUTES))
             .retryOnConnectionFailure(false)
             .build()

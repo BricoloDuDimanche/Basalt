@@ -9,8 +9,6 @@ import org.json.JSONObject
 import org.slf4j.LoggerFactory
 
 class Deezer {
-    private val logger = LoggerFactory.getLogger("Basalt::DeezerClient")
-
     // ----------
     // API Functions
     // ----------

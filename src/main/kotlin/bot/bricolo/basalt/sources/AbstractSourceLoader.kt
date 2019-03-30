@@ -28,15 +28,23 @@ abstract class AbstractSourceLoader : AudioSourceManager {
         return if (item is AudioPlaylist) item.tracks.first() else AudioReference.NO_TRACK
     }
 
-    // @todo: Parallel!!!
     protected fun handlePlaylist(manager: DefaultAudioPlayerManager, playlist: BasaltPlaylist): AudioItem {
         if (playlist.tracks.size == 0) return AudioReference.NO_TRACK
 
-        val tracks = mutableListOf<AudioTrack>()
-        playlist.tracks.map { getYoutubeTrack(manager, it) }.forEach { if (it is AudioTrack) tracks.add(it) }
+        val tracks = mutableListOf<Pair<Int, AudioTrack>>()
+        playlist.tracks
+                .mapIndexed { i, t -> Pair(i, t) }
+                .parallelStream()
+                .map { Pair(it.first, getYoutubeTrack(manager, it.second)) }
+                .forEach {
+                    @Suppress("UNCHECKED_CAST")
+                    if (it.second is AudioTrack) tracks.add(it as Pair<Int, AudioTrack>)
+                }
+
+        tracks.sortBy { it.first }
         return BasicAudioPlaylist(
                 playlist.name,
-                tracks,
+                tracks.map { it.second },
                 null,
                 false
         )

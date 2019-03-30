@@ -10,12 +10,13 @@
 **NOTE**: The plugin is **very unstable** atm and should **not** be used in a production app.
 
 ## Supported platforms 
- - Spotify
- - Deezer
- - PornHub
+ - Spotify (Track, Playlist and Album)
+ - Deezer (Track, Playlist and Album)
+ - PornHub (Track)
 
 ## How it work
-Just fetch /loadtracks with a link from a custom source provider. It works for tracks, playlist and albums.
+Just fetch /loadtracks with a link from a custom source provider.<br>
+*Note* PornHub integration can take a phsearch:<blabla> to search videos
 
 Example:
 ``` 
@@ -44,20 +45,26 @@ GET /loadtracks?identifier=https://open.spotify.com/track/1HDApabtZoWpGEcWAMMyNM
 ```
 
 ## Configuration
-By default, all custom sources are disabled. You'll need to add some entries to your Andesite config.
+You'll need to add some entries to your Andesite config to setup Basalt
 
-Note that some services like Spotify requires you to use an access token, so you'll need a Spotify app<br>
-Only `youtube-keys` is required. Not setting it up will just make Basalt return no track for every search
+| Key                         | Type     | Description                                                          | Default |
+|-----------------------------|----------|----------------------------------------------------------------------|---------|
+| basalt.source.spotify       | boolean  | Whether or not to enable Spotify integration                         | false   |
+| basalt.source.deezer        | boolean  | Whether or not to enable Deezer integration                          | false   |
+| basalt.source.pornhub       | boolean  | Whether or not to enable PornHub integration                         | false   |
+| basalt.spotify.clientID     | string   | Spotify client ID                                                    | null    |
+| basalt.spotify.clientSecret | string   | Spotify client secret                                                | null    |
+| basalt.max-heavy-tracks     | int      | Maximum tracks to load from a playlist considered as [heavy](#heavy) | 25      |
 
-| Key                         | Type     | Description                                                                            |
-|-----------------------------|----------|----------------------------------------------------------------------------------------|
-| basalt.proxy                | String[] | Proxy IPs used to bypass ratelimits from some services (PornHub, ...), comma separated |
-| basalt.youtube-keys         | String   | Youtube API keys used to fetch tracks, comma separated to use key rotation             |
-| basalt.spotify.enabled      | boolean  | Whether or not to enable Spotify integration                                           |
-| basalt.spotify.clientID     | string   | Spotify client ID                                                                      |
-| basalt.spotify.clientSecret | string   | Spotify client secret                                                                  |
-| basalt.deezer.enabled       | boolean  | Whether or not to enable Deezer integration                                            |
-| basalt.pornhub.enabled      | boolean  | Whether or not to enable PornHub integration                                           |
+### Heavy
+
+Spotify and Deezer implementation not actually stream from the service. Basalt fetched an equivalent on YouTube and
+plays that instead.
+Problem is that since YouTube is taking action against bots and automated software you might get flagged for this and
+get your IP temporarily or permanently banned as Basalt needs to make a heavy amount of requests (1 per track).
+
+To prevent those issues, you should restrict this feature in your bot to prevent heavy loads, and only fetch a small
+amount of tracks to prevent being flagged.
 
 ## Attribution
 

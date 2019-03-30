@@ -36,27 +36,27 @@ class Basalt : Plugin {
     override fun init(state: NodeState) {
         logger.info("Starting Basalt version ${Version.VERSION}, commit ${Version.COMMIT}")
 
-        if (state.config().getBoolean("basalt.spotify.enabled", false))
+        if (state.config().getBoolean("basalt.source.spotify", false))
             spotify = Spotify(state.config().get("basalt.spotify.clientID", ""), state.config().get("basalt.spotify.clientSecret", ""))
 
-        if (state.config().getBoolean("basalt.deezer.enabled", false))
+        if (state.config().getBoolean("basalt.source.deezer", false))
             deezer = Deezer()
     }
 
     override fun configurePlayerManager(state: NodeState, manager: AudioPlayerManager) {
-        if (state.config().getBoolean("basalt.spotify.enabled", false)) {
+        if (state.config().getBoolean("basalt.source.spotify", false)) {
             logger.info("Registering SpotifySourceManager source manager")
-            manager.registerSourceManager(SpotifySourceManager())
+            manager.registerSourceManager(SpotifySourceManager(state.config().getInt("basalt.max-heavy-tracks", 10)))
         }
 
-        if (state.config().getBoolean("basalt.pornhub.enabled", false)) {
+        if (state.config().getBoolean("basalt.source.pornhub", false)) {
             logger.info("Registering PornHubSourceManager source manager")
             manager.registerSourceManager(PornHubSourceManager())
         }
 
-        if (state.config().getBoolean("basalt.deezer.enabled", false)) {
+        if (state.config().getBoolean("basalt.source.deezer", false)) {
             logger.info("Registering DeezerSourceManager source manager")
-            manager.registerSourceManager(DeezerSourceManager())
+            manager.registerSourceManager(DeezerSourceManager(state.config().getInt("basalt.max-heavy-tracks", 10)))
         }
     }
 }

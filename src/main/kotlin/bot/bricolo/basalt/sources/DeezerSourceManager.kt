@@ -7,7 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioReference
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class DeezerSourceManager : AbstractSourceLoader() {
+class DeezerSourceManager(private val maxTracks: Int) : AbstractSourceLoader() {
     @Suppress("PrivatePropertyName")
     private val PLAYLIST_PATTERN = Pattern.compile("^https?://.*\\.deezer\\.com/(?:[a-z]{2}/)?playlist/([0-9]+).*")
 
@@ -22,8 +22,8 @@ class DeezerSourceManager : AbstractSourceLoader() {
     override fun loadItem(manager: DefaultAudioPlayerManager, reference: AudioReference): AudioItem? {
         return when {
             TRACK_PATTERN.toRegex().matches(reference.identifier) -> loadTrack(manager, TRACK_PATTERN.matcher(reference.identifier))
-            // PLAYLIST_PATTERN.toRegex().matches(reference.identifier) -> loadPlaylist(manager, PLAYLIST_PATTERN.matcher(reference.identifier))
-            // ALBUM_PATTERN.toRegex().matches(reference.identifier) -> loadAlbum(manager, ALBUM_PATTERN.matcher(reference.identifier))
+            PLAYLIST_PATTERN.toRegex().matches(reference.identifier) -> loadPlaylist(manager, PLAYLIST_PATTERN.matcher(reference.identifier))
+            ALBUM_PATTERN.toRegex().matches(reference.identifier) -> loadAlbum(manager, ALBUM_PATTERN.matcher(reference.identifier))
             else -> null
         }
     }
@@ -41,6 +41,7 @@ class DeezerSourceManager : AbstractSourceLoader() {
         val listId: String = match.group(2)
         val playlist = Basalt.deezer.getTracksFromPlaylist(listId) ?: return AudioReference.NO_TRACK
 
+        playlist.truncate(maxTracks)
         return handlePlaylist(manager, playlist)
     }
 
@@ -49,6 +50,7 @@ class DeezerSourceManager : AbstractSourceLoader() {
         val albumId: String = match.group(1)
         val playlist = Basalt.deezer.getTracksFromAlbum(albumId) ?: return AudioReference.NO_TRACK
 
+        playlist.truncate(maxTracks)
         return handlePlaylist(manager, playlist)
     }
 }
