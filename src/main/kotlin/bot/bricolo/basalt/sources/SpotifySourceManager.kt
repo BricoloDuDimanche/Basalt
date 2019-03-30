@@ -11,7 +11,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioReference
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class SpotifySourceManager() : AbstractSourceLoader() {
+class SpotifySourceManager : AbstractSourceLoader() {
     @Suppress("PrivatePropertyName")
     private val PLAYLIST_PATTERN = Pattern.compile("^https?://.*\\.spotify\\.com/user/([a-zA-Z0-9_]+)/playlist/([a-zA-Z0-9]+).*")
 
@@ -21,7 +21,7 @@ class SpotifySourceManager() : AbstractSourceLoader() {
     @Suppress("PrivatePropertyName")
     private val TRACK_PATTERN = Pattern.compile("^https?://.*\\.spotify\\.com/track/([a-zA-Z0-9]+).*")
 
-    override fun getSourceName() = "SpotifySourceManager"
+    override fun getSourceName() = "spotify"
 
     override fun loadItem(manager: DefaultAudioPlayerManager, reference: AudioReference): AudioItem? {
         return when {

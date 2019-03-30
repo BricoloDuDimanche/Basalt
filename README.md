@@ -55,6 +55,7 @@ Only `youtube-keys` is required. Not setting it up will just make Basalt return 
 | basalt.spotify.enabled      | boolean  | Whether or not to enable Spotify integration                                           |
 | basalt.spotify.clientID     | string   | Spotify client ID                                                                      |
 | basalt.spotify.clientSecret | string   | Spotify client secret                                                                  |
+| basalt.pornhub.enabled      | boolean  | Whether or not to enable PornHub integration                                           |
 
 ## Attribution
 

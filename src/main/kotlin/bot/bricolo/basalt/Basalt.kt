@@ -3,6 +3,7 @@ package bot.bricolo.basalt
 import andesite.node.NodeState
 import andesite.node.Plugin
 import bot.bricolo.basalt.clients.Spotify
+import bot.bricolo.basalt.sources.PornHubSourceManager
 import bot.bricolo.basalt.sources.SpotifySourceManager
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import org.slf4j.LoggerFactory
@@ -38,6 +39,11 @@ class Basalt : Plugin {
         if (state.config().getBoolean("basalt.spotify.enabled", false)) {
             logger.info("Registering SpotifySourceManager source manager")
             manager.registerSourceManager(SpotifySourceManager())
+        }
+
+        if (state.config().getBoolean("basalt.pornhub.enabled", false)) {
+            logger.info("Registering PornHubSourceManager source manager")
+            manager.registerSourceManager(PornHubSourceManager())
         }
     }
 }

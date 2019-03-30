@@ -1,6 +1,5 @@
 package bot.bricolo.basalt.sources
 
-import bot.bricolo.basalt.Basalt
 import bot.bricolo.basalt.clients.entities.BasaltPlaylist
 import bot.bricolo.basalt.clients.entities.BasaltTrack
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
@@ -11,11 +10,16 @@ import java.io.DataInput
 import java.io.DataOutput
 
 abstract class AbstractSourceLoader : AudioSourceManager {
-    override fun isTrackEncodable(track: AudioTrack?) = false
+    override fun isTrackEncodable(track: AudioTrack) = false
     override fun shutdown() {}
 
-    override fun encodeTrack(track: AudioTrack?, output: DataOutput?) = throw UnsupportedOperationException("Source manager may only be used to load items.")
-    override fun decodeTrack(trackInfo: AudioTrackInfo?, input: DataInput?) = throw UnsupportedOperationException("Source manager may only be used to load items.")
+    override fun encodeTrack(track: AudioTrack, output: DataOutput) {
+        throw UnsupportedOperationException("Source manager may only be used to load items.")
+    }
+
+    override fun decodeTrack(trackInfo: AudioTrackInfo, input: DataInput): AudioTrack {
+        throw UnsupportedOperationException("Source manager may only be used to load items.")
+    }
 
     protected fun getYoutubeTrack(manager: DefaultAudioPlayerManager, track: BasaltTrack): AudioItem {
         val youtube = manager.source(YoutubeAudioSourceManager::class.java)
