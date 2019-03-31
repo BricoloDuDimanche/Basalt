@@ -14,9 +14,15 @@
  - Deezer (Track, Playlist and Album)
  - PornHub (Track)
 
+### Coming soon
+ - Tidal
+ - Napster
+
 ## How it work
+### Custom sources
+
 Just fetch /loadtracks with a link from a custom source provider.<br>
-*Note* PornHub integration can take a phsearch:<blabla> to search videos
+*Note* You can search PornHub videos with the `phsearch:` prefix.
 
 Example:
 ``` 
@@ -44,17 +50,30 @@ GET /loadtracks?identifier=https://open.spotify.com/track/1HDApabtZoWpGEcWAMMyNM
 }
 ```
 
+### Cache
+When enabled, Basalt will save loadtrack results to the cache for faster lookup on highly queried tracks.
+
+Basalt will add a `cacheStatus` key in the json result, that will either be `HIT` or `MISS` depending on if the track
+have been pulled from cache. You can bypass cache by adding `nocache=1` in the query parameters. Then `cacheStatus` will
+always be `MISS`
+
 ## Configuration
 You'll need to add some entries to your Andesite config to setup Basalt
 
-| Key                         | Type     | Description                                                          | Default |
-|-----------------------------|----------|----------------------------------------------------------------------|---------|
-| basalt.source.spotify       | boolean  | Whether or not to enable Spotify integration                         | false   |
-| basalt.source.deezer        | boolean  | Whether or not to enable Deezer integration                          | false   |
-| basalt.source.pornhub       | boolean  | Whether or not to enable PornHub integration                         | false   |
-| basalt.spotify.clientID     | string   | Spotify client ID                                                    | null    |
-| basalt.spotify.clientSecret | string   | Spotify client secret                                                | null    |
-| basalt.max-heavy-tracks     | int      | Maximum tracks to load from a playlist considered as [heavy](#heavy) | 10      |
+| Key                         | Type     | Description                                                          | Default   |
+|-----------------------------|----------|----------------------------------------------------------------------|-----------|
+| basalt.cache.enabled        | boolean  | Whether or not to enable Redis caching                               | false     |
+| basalt.cache.host           | string   | Redis host                                                           | 127.0.0.1 |
+| basalt.cache.port           | int      | Redis port                                                           | 6379      |
+| basalt.cache.ssl            | boolean  | Whether or not to connect using ssl                                  | false     |
+| basalt.cache.password       | string   | Password used to authenticate                                        | null      |
+| basalt.cache.ttl            | int      | TTL for cache entries                                                | 300       |
+| basalt.source.spotify       | boolean  | Whether or not to enable Spotify integration                         | false     |
+| basalt.source.deezer        | boolean  | Whether or not to enable Deezer integration                          | false     |
+| basalt.source.pornhub       | boolean  | Whether or not to enable PornHub integration                         | false     |
+| basalt.spotify.clientID     | string   | Spotify client ID                                                    | null      |
+| basalt.spotify.clientSecret | string   | Spotify client secret                                                | null      |
+| basalt.max-heavy-tracks     | int      | Maximum tracks to load from a playlist considered as [heavy](#heavy) | 10        |
 
 ### Heavy
 

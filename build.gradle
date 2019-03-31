@@ -14,7 +14,7 @@ buildscript {
 
 apply plugin: "kotlin"
 
-def versionObj = new Version(major: 0, minor: 2, revision: 0)
+def versionObj = new Version(major: 0, minor: 3, revision: 0)
 
 allprojects {
     group 'bot.bricolo.basalt'
@@ -31,6 +31,7 @@ repositories {
 dependencies {
     api 'org.slf4j:slf4j-api:1.7.25'
     compile 'org.json:json:20180813'
+    compile 'redis.clients:jedis:3.1.0-m1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.squareup.okhttp3:okhttp:3.13.0'
     implementation 'com.github.natanbc:andesite-api:0.15.5'
