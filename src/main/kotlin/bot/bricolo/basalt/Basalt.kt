@@ -5,9 +5,11 @@ import andesite.node.Plugin
 import andesite.node.util.RequestUtils
 import bot.bricolo.basalt.clients.Deezer
 import bot.bricolo.basalt.clients.Spotify
+import bot.bricolo.basalt.clients.Tidal
 import bot.bricolo.basalt.sources.DeezerSourceManager
 import bot.bricolo.basalt.sources.PornHubSourceManager
 import bot.bricolo.basalt.sources.SpotifySourceManager
+import bot.bricolo.basalt.sources.TidalSourceManager
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import io.vertx.core.json.JsonObject
@@ -26,6 +28,9 @@ class Basalt : Plugin {
             private set
 
         lateinit var deezer: Deezer
+            private set
+
+        lateinit var tidal: Tidal
             private set
 
         lateinit var jedis: Jedis
@@ -50,6 +55,9 @@ class Basalt : Plugin {
 
         if (state.config().getBoolean("basalt.source.deezer", false))
             deezer = Deezer()
+
+        if (state.config().getBoolean("basalt.source.tidal", false))
+            tidal = Tidal(state.config().get("basalt.tidal-countryCode", "US"))
 
         if (state.config().getBoolean("basalt.cache.enabled")) {
             logger.info("Connecting to Redis")
@@ -82,8 +90,10 @@ class Basalt : Plugin {
 
             state.requestHandler().resolveTracks(identifier)
                     .thenAccept { json ->
-                        jedis.set("Basalt:$cacheIdentifier", json.encode(), SetParams().ex(state.config().getInt("basalt.cache.ttl", 300)))
-                        json.put("cacheStatus", "MISS")
+                        if (json.getString("loadType") != "NO_MATCHES") {
+                            jedis.set("Basalt:$cacheIdentifier", json.encode(), SetParams().ex(state.config().getInt("basalt.cache.ttl", 300)))
+                            json.put("cacheStatus", "MISS")
+                        }
                         context.response().end(json.toBuffer())
                     }
                     .exceptionally { e ->
@@ -109,14 +119,19 @@ class Basalt : Plugin {
             manager.registerSourceManager(SpotifySourceManager(state.config().getInt("basalt.max-heavy-tracks", 10)))
         }
 
-        if (state.config().getBoolean("basalt.source.pornhub", false)) {
-            logger.info("Registering PornHubSourceManager source manager")
-            manager.registerSourceManager(PornHubSourceManager())
-        }
-
         if (state.config().getBoolean("basalt.source.deezer", false)) {
             logger.info("Registering DeezerSourceManager source manager")
             manager.registerSourceManager(DeezerSourceManager(state.config().getInt("basalt.max-heavy-tracks", 10)))
+        }
+
+        if (state.config().getBoolean("basalt.source.tidal", false)) {
+            logger.info("Registering TidalSourceManager source manager")
+            manager.registerSourceManager(TidalSourceManager(state.config().getInt("basalt.max-heavy-tracks", 10)))
+        }
+
+        if (state.config().getBoolean("basalt.source.pornhub", false)) {
+            logger.info("Registering PornHubSourceManager source manager")
+            manager.registerSourceManager(PornHubSourceManager())
         }
     }
 

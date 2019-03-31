@@ -12,10 +12,10 @@
 ## Supported platforms 
  - Spotify (Track, Playlist and Album)
  - Deezer (Track, Playlist and Album)
+ - Tidal (Track, Playlist and Album)
  - PornHub (Track)
 
 ### Coming soon
- - Tidal
  - Napster
 
 ## How it work
@@ -70,9 +70,11 @@ You'll need to add some entries to your Andesite config to setup Basalt
 | basalt.cache.ttl            | int      | TTL for cache entries                                                | 300       |
 | basalt.source.spotify       | boolean  | Whether or not to enable Spotify integration                         | false     |
 | basalt.source.deezer        | boolean  | Whether or not to enable Deezer integration                          | false     |
+| basalt.source.tidal         | boolean  | Whether or not to enable Tidal integration                           | false     |
 | basalt.source.pornhub       | boolean  | Whether or not to enable PornHub integration                         | false     |
 | basalt.spotify.clientID     | string   | Spotify client ID                                                    | null      |
 | basalt.spotify.clientSecret | string   | Spotify client secret                                                | null      |
+| basalt.tidal-countryCode    | string   | Contry code used to perform requests to Tidal                        | US        |
 | basalt.max-heavy-tracks     | int      | Maximum tracks to load from a playlist considered as [heavy](#heavy) | 10        |
 
 ### Heavy
