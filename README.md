@@ -2,12 +2,10 @@
 [![Build Status](https://img.shields.io/travis/BricoloDuDimanche/Basalt.svg?branch=master&style=flat-square&logo=travis)](https://travis-ci.org/BricoloDuDimanche/Basalt)
 [![Latest GitHub tag](https://img.shields.io/github/tag-date/BricoloDuDimanche/Basalt.svg?style=flat-square)](https://github.com/BricoloDuDimanche/Basalt/releases)
 [![License](https://img.shields.io/github/license/BricoloDuDimanche/Basalt.svg?style=flat-square)](https://github.com/BricoloDuDimanche/Basalt/blob/master/LICENSE)
-[![Discord](https://img.shields.io/badge/chat-on%20Discord%20(%23basalt)-7289DA.svg?style=flat-square)](https://discord.gg/2CkzJzM)
+[![Discord](https://img.shields.io/badge/chat-on%20Discord%20(%23basalt)-7289DA.svg?style=flat-square)](https://discord.gg/V82UXC5)
 [![Donate](https://img.shields.io/badge/donate-Patreon-F96854.svg?style=flat-square)](https://www.patreon.com/Bowser65)
 
-[Andesite](https://github.com/natanbc/andesite-node) plugin to provide extra sources like Spotify or Deezer as well as caching
-
-**NOTE**: The plugin is **very unstable** atm and should **not** be used in a production app.
+[Andesite](https://github.com/natanbc/andesite-node) plugin to provide extra sources like Spotify or Deezer as well as caching.
 
 ## Supported platforms 
  - Spotify (Track, Playlist and Album)
@@ -58,24 +56,24 @@ have been pulled from cache. You can bypass cache by adding `nocache=1` in the q
 always be `MISS`
 
 ## Configuration
-You'll need to add some entries to your Andesite config to setup Basalt
+All keys must be prefixed with `basalt.`. When using a HOCON file, they can be put inside a block named `basalt`.
 
-| Key                         | Type     | Description                                                          | Default   |
-|-----------------------------|----------|----------------------------------------------------------------------|-----------|
-| basalt.cache.enabled        | boolean  | Whether or not to enable Redis caching                               | false     |
-| basalt.cache.host           | string   | Redis host                                                           | 127.0.0.1 |
-| basalt.cache.port           | int      | Redis port                                                           | 6379      |
-| basalt.cache.ssl            | boolean  | Whether or not to connect using ssl                                  | false     |
-| basalt.cache.password       | string   | Password used to authenticate                                        | null      |
-| basalt.cache.ttl            | int      | TTL for cache entries                                                | 300       |
-| basalt.source.spotify       | boolean  | Whether or not to enable Spotify integration                         | false     |
-| basalt.source.deezer        | boolean  | Whether or not to enable Deezer integration                          | false     |
-| basalt.source.tidal         | boolean  | Whether or not to enable Tidal integration                           | false     |
-| basalt.source.pornhub       | boolean  | Whether or not to enable PornHub integration                         | false     |
-| basalt.spotify.clientID     | string   | Spotify client ID                                                    | null      |
-| basalt.spotify.clientSecret | string   | Spotify client secret                                                | null      |
-| basalt.tidal-countryCode    | string   | Contry code used to perform requests to Tidal                        | US        |
-| basalt.max-heavy-tracks     | int      | Maximum tracks to load from a playlist considered as [heavy](#heavy) | 10        |
+| Key                  | Type     | Description                                                          | Default   |
+|----------------------|----------|----------------------------------------------------------------------|-----------|
+| cache.enabled        | boolean  | Whether or not to enable Redis caching                               | false     |
+| cache.host           | string   | Redis host                                                           | 127.0.0.1 |
+| cache.port           | int      | Redis port                                                           | 6379      |
+| cache.ssl            | boolean  | Whether or not to connect using ssl                                  | false     |
+| cache.password       | string   | Password used to authenticate                                        | null      |
+| cache.ttl            | int      | TTL for cache entries                                                | 300       |
+| source.spotify       | boolean  | Whether or not to enable Spotify integration                         | false     |
+| source.deezer        | boolean  | Whether or not to enable Deezer integration                          | false     |
+| source.tidal         | boolean  | Whether or not to enable Tidal integration                           | false     |
+| source.pornhub       | boolean  | Whether or not to enable PornHub integration                         | false     |
+| spotify.clientID     | string   | Spotify client ID                                                    | null      |
+| spotify.clientSecret | string   | Spotify client secret                                                | null      |
+| tidal-countryCode    | string   | Contry code used to perform requests to Tidal                        | US        |
+| max-heavy-tracks     | int      | Maximum tracks to load from a playlist considered as [heavy](#heavy) | 10        |
 
 ### Heavy
 

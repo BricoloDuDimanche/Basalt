@@ -49,20 +49,21 @@ class Basalt : Plugin {
     }
 
     override fun init(state: NodeState) {
+        println(state.config().entrySet())
         logger.info("Starting Basalt version ${Version.VERSION}, commit ${Version.COMMIT}")
-        if (state.config().getBoolean("basalt.source.spotify", false))
-            spotify = Spotify(state.config().get("basalt.spotify.clientID", ""), state.config().get("basalt.spotify.clientSecret", ""))
+        if (state.config().getBoolean("basalt.source.spotify"))
+            spotify = Spotify(state.config().getString("basalt.spotify.clientID"), state.config().getString("basalt.spotify.clientSecret"))
 
-        if (state.config().getBoolean("basalt.source.deezer", false))
+        if (state.config().getBoolean("basalt.source.deezer"))
             deezer = Deezer()
 
-        if (state.config().getBoolean("basalt.source.tidal", false))
-            tidal = Tidal(state.config().get("basalt.tidal-countryCode", "US"))
+        if (state.config().getBoolean("basalt.source.tidal"))
+            tidal = Tidal(state.config().getString("basalt.tidal-countryCode"))
 
         if (state.config().getBoolean("basalt.cache.enabled")) {
             logger.info("Connecting to Redis")
             // @todo: Allow connection pooling
-            jedis = Jedis(state.config().get("basalt.cache.host", "127.0.0.1"), state.config().getInt("basalt.cache.port", 6379), state.config().getBoolean("basalt.cache.ssl", false))
+            jedis = Jedis(state.config().getString("basalt.cache.host"), state.config().getInt("basalt.cache.port"), state.config().getBoolean("basalt.cache.ssl"))
         }
     }
 
@@ -91,7 +92,7 @@ class Basalt : Plugin {
             state.requestHandler().resolveTracks(identifier)
                     .thenAccept { json ->
                         if (json.getString("loadType") != "NO_MATCHES") {
-                            jedis.set("Basalt:$cacheIdentifier", json.encode(), SetParams().ex(state.config().getInt("basalt.cache.ttl", 300)))
+                            jedis.set("Basalt:$cacheIdentifier", json.encode(), SetParams().ex(state.config().getInt("basalt.cache.ttl")))
                             json.put("cacheStatus", "MISS")
                         }
                         context.response().end(json.toBuffer())
@@ -114,22 +115,22 @@ class Basalt : Plugin {
     }
 
     override fun configurePlayerManager(state: NodeState, manager: AudioPlayerManager) {
-        if (state.config().getBoolean("basalt.source.spotify", false)) {
+        if (state.config().getBoolean("basalt.source.spotify")) {
             logger.info("Registering SpotifySourceManager source manager")
-            manager.registerSourceManager(SpotifySourceManager(state.config().getInt("basalt.max-heavy-tracks", 10)))
+            manager.registerSourceManager(SpotifySourceManager(state.config().getInt("basalt.max-heavy-tracks")))
         }
 
-        if (state.config().getBoolean("basalt.source.deezer", false)) {
+        if (state.config().getBoolean("basalt.source.deezer")) {
             logger.info("Registering DeezerSourceManager source manager")
-            manager.registerSourceManager(DeezerSourceManager(state.config().getInt("basalt.max-heavy-tracks", 10)))
+            manager.registerSourceManager(DeezerSourceManager(state.config().getInt("basalt.max-heavy-tracks")))
         }
 
-        if (state.config().getBoolean("basalt.source.tidal", false)) {
+        if (state.config().getBoolean("basalt.source.tidal")) {
             logger.info("Registering TidalSourceManager source manager")
-            manager.registerSourceManager(TidalSourceManager(state.config().getInt("basalt.max-heavy-tracks", 10)))
+            manager.registerSourceManager(TidalSourceManager(state.config().getInt("basalt.max-heavy-tracks")))
         }
 
-        if (state.config().getBoolean("basalt.source.pornhub", false)) {
+        if (state.config().getBoolean("basalt.source.pornhub")) {
             logger.info("Registering PornHubSourceManager source manager")
             manager.registerSourceManager(PornHubSourceManager())
         }
@@ -140,6 +141,7 @@ class Basalt : Plugin {
         return identifier
     }
 
+    @Suppress("SameParameterValue")
     private fun error(context: RoutingContext, code: Int, message: String) {
         context.response()
                 .setStatusCode(code).setStatusMessage(message)

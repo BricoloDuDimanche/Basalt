@@ -14,7 +14,7 @@ buildscript {
 
 apply plugin: "kotlin"
 
-def versionObj = new Version(major: 0, minor: 3, revision: 0)
+def versionObj = new Version(major: 0, minor: 4, revision: 0)
 
 allprojects {
     group 'bot.bricolo.basalt'
@@ -34,7 +34,7 @@ dependencies {
     compile 'redis.clients:jedis:3.1.0-m1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.squareup.okhttp3:okhttp:3.13.0'
-    implementation 'com.github.natanbc:andesite-api:0.15.5'
+    implementation 'com.github.natanbc:andesite-api:0.17.2'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
