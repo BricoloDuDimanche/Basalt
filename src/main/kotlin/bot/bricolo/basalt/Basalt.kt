@@ -49,7 +49,6 @@ class Basalt : Plugin {
     }
 
     override fun init(state: NodeState) {
-        println(state.config().entrySet())
         logger.info("Starting Basalt version ${Version.VERSION}, commit ${Version.COMMIT}")
         if (state.config().getBoolean("basalt.source.spotify"))
             spotify = Spotify(state.config().getString("basalt.spotify.clientID"), state.config().getString("basalt.spotify.clientSecret"))
