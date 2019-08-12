@@ -5,13 +5,15 @@
 [![Discord](https://img.shields.io/badge/chat-on%20Discord%20(%23basalt)-7289DA.svg?style=flat-square)](https://discord.gg/V82UXC5)
 [![Donate](https://img.shields.io/badge/donate-Patreon-F96854.svg?style=flat-square)](https://www.patreon.com/Bowser65)
 
-[Andesite](https://github.com/natanbc/andesite-node) plugin to provide extra sources like Spotify or Deezer as well as caching.
+[Andesite](https://github.com/natanbc/andesite-node) plugin to provide extra features such as caching and sources like
+Spotify.
 
 ## Supported platforms 
  - Spotify (Track, Playlist and Album)
  - Deezer (Track, Playlist and Album)
  - Tidal (Track, Playlist and Album)
  - PornHub (Track)
+ - Mixcloud
 
 ### Coming soon
  - Napster
@@ -69,6 +71,7 @@ All keys must be prefixed with `basalt.`. When using a HOCON file, they can be p
 | source.spotify       | boolean  | Whether or not to enable Spotify integration                         | false     |
 | source.deezer        | boolean  | Whether or not to enable Deezer integration                          | false     |
 | source.tidal         | boolean  | Whether or not to enable Tidal integration                           | false     |
+| source.mixcloud      | boolean  | Whether or not to enable Mixcloud integration                        | false     |
 | source.pornhub       | boolean  | Whether or not to enable PornHub integration                         | false     |
 | spotify.clientID     | string   | Spotify client ID                                                    | null      |
 | spotify.clientSecret | string   | Spotify client secret                                                | null      |
@@ -87,4 +90,4 @@ amount of tracks to prevent being flagged.
 
 ## Attribution
 
-PornHub integration mostly taken from [JukeBot](https://github.com/Devoxin/JukeBot) by [Devoxin](https://github.com/Devoxin) (Licensed under [Apache License 2.0](https://github.com/Devoxin/JukeBot/blob/master/LICENSE))
+PornHub and Mixcloud integrations taken from [JukeBot](https://github.com/Devoxin/JukeBot) by [Devoxin](https://github.com/Devoxin) (Licensed under [Apache License 2.0](https://github.com/Devoxin/JukeBot/blob/master/LICENSE))
